@@ -1,0 +1,8 @@
+import static groovyx.gpars.GParsPool.withPool
+
+numbers = [1,2,3,4,5,6]
+squares = numbers.collect{it*it}
+
+withPool {
+	  sqp = numbers.collectParallel{ it*it }
+}

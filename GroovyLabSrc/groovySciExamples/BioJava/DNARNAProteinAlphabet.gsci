@@ -1,0 +1,9 @@
+
+
+import  java.util.*
+import org.biojava.bio.seq.*
+import org.biojava.bio.symbol.*
+
+dna = AlphabetManager.alphabetForName("DNA")
+
+rna = AlphabetManager.alphabetForName("RNA")

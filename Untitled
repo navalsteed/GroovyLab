@@ -1,0 +1,4 @@
+
+x=rand(4,5)
+
+y= x.toDoubleArray()

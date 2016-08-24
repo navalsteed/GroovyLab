@@ -1,0 +1,44 @@
+
+import htsjdk.samtools.util.CloseableIterator;
+import htsjdk.samtools.util.CloserUtil;
+import htsjdk.samtools.*
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
+seq1 = "AGCTTAGCTAGCTACCTATATCTTGGTCTTGGCCG"
+seq2 = "ACCTATATCTTGGCCTTGGCCGATGCGGCCTTGCA";
+qual1 = "<<<<<<<<<<<<<<<<<<<<<:<9/,&,22;;<<<";
+qual2 = "<<<<<;<<<<7;:<<<6;<<<<<<<<<<<<7<<<<";
+fileFormatVersion = "1.0";
+sequence = "chr20";
+sequenceLength = 62435964;
+charTag = "XC";
+charValue = 'q';
+intTag = "XI";
+intValue = 12345;
+floatTag = "XF";
+floatValue = 1.2345f;
+stringTag = "XS";
+stringValue = "Hi,Mom!";
+samExample = "@HD\tVN:" + fileFormatVersion + "\t" + charTag + ":" + charValue + "\n" +
+                "@SQ\tSN:" + sequence + "\tAS:HG18\tLN:" + sequenceLength + "\t" + intTag + ":" + intValue + "\n" +
+                "@RG\tID:L1\tPU:SC_1_10\tLB:SC_1\tSM:NA12891" + "\t" + floatTag + ":" + floatValue + "\n" +
+                "@RG\tID:L2\tPU:SC_2_12\tLB:SC_2\tSM:NA12891\n" +
+                "@PG\tID:0\tVN:1.0\tCL:yo baby\t" + stringTag + ":" + stringValue + "\n" +
+                "@PG\tID:2\tVN:1.1\tCL:whassup? ? ? ?\n" +
+                "read_28833_29006_6945\t99\tchr20\t28833\t20\t10M1D25M\t=\t28993\t195\t" +
+                seq1.toLowerCase() + "\t" + qual1 + "\t" +
+                "MF:i:130\tNm:i:1\tH0:i:0\tH1:i:0\tRG:Z:L1\n" +
+                "read_28701_28881_323b\t147\tchr20\t28834\t30\t35M\t=\t28701\t-168\t" +
+                seq2 + "\t" + qual2 + "\t" +
+                "MF:i:18\tNm:i:0\tH0:i:1\tH1:i:0\tRG:Z:L2\n";
+
+
+def  createSamFileReader(final String samExample) {
+        final ByteArrayInputStream inputStream = new ByteArrayInputStream(samExample.getBytes());
+        return SamReaderFactory.makeDefault().open(SamInputResource.of(inputStream));
+    }
+
+samReader = createSamFileReader(samExample)
+fileHeader = samReader.getFileHeader()
+        

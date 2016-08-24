@@ -1,0 +1,148 @@
+import java.util.Random;
+import com.amd.aparapi.Kernel;
+ 
+/**
+ * @author Vasanth Raja Chittampally
+ */
+ 
+public class AparapiMatrixMultiplication  {
+    public static void main(String [] args) throws Exception
+    {
+ 
+        final int r = 1024;
+        final int c1 = r;
+        final int c2 = r;
+        AparapiMatMul ap = new AparapiMatMul(r, c1, c2);
+ 
+        try {
+        long  time1 = System.currentTimeMillis();
+                //ap.setExecutionMode(Kernel.EXECUTION_MODE.JTP);
+                //ap.setExecutionMode(Kernel.EXECUTION_MODE.GPU);
+                //ap.setExecutionMode(Kernel.EXECUTION_MODE.CPU);
+        ap.execute(r,c2);
+        System.out.println("Time taken for kenel execution in "+ ap.getExecutionMode()+ " mode is :"+ (System.currentTimeMillis() - time1));
+        }catch(NullPointerException ne){
+            ne.printStackTrace();
+        }
+        //ap.printResults();
+        long time1 = System.currentTimeMillis();
+        ap.normalMatMulCalc();
+        System.out.println("Time taken for kenel execution in Sequential CPU mode is :"+ (System.currentTimeMillis() - time1));
+        ap.compareResults();
+        ap.dispose();
+    }
+}
+ 
+class AparapiMatMul extends Kernel {
+ 
+    float [] matA;
+    float []matB;
+    float []matC;
+    float []C;
+ 
+    int rows ;
+    int cols1;
+    int cols2;
+ 
+    @Override
+    public void run() {
+        int i = getGlobalId();
+        int j = getPassId();
+        float value = 0;
+        for(int k = 0; k < cols1; k++)
+        {
+            value += matA[k + i * cols1] * matB[k * cols2 + j];
+        }
+        matC[i * cols1 + j] = value;
+    }
+ 
+    public AparapiMatMul(int r, int c1, int c2)
+    {
+ 
+        rows = r;
+        cols1 = c1;
+        cols2 = c2;
+ 
+        matA = new float [r * c1];
+        matB = new float [c1 * c2];
+        matC = new float [r * c2];
+        C = new float[r * c2];
+        //matC should be initialized with zeros
+        for(int i = 0; i < r; i++ )
+        {
+            for(int j = 0 ; j < c1; j++ )
+            {
+                matC[i * c1 + j ] = 0;
+ 
+            }
+        }
+ 
+        //Here matrix A is initialized with random numbers
+ 
+        for(int i = 0; i < r; i++ )
+        {
+            for(int j = 0 ; j < c1; j++ )
+            {
+                matA[i * c1 +j] = new Random().nextFloat();
+            }
+        }
+ 
+        // Here matrix B is initialized with random numbers
+ 
+        for(int i = 0; i < r; i++ )
+        {
+            for(int j = 0 ; j < c1; j++ )
+            {
+                matB[i * c2 + j] = new Random().nextFloat();
+            }
+        }
+ 
+    }
+ 
+    public void printResults()
+    {
+        for(int i = 0; i < rows; i++ )
+        {
+            for(int j = 0 ; j < cols2; j++ )
+            {
+                System.out.print(matC[i * cols2 + j]+"    ");
+            }
+        }
+    }
+ 
+    public void normalMatMulCalc()
+    {
+        System.out.println();
+        System.out.println("Sequential Execution on CPU");
+         for(int i = 0;i < rows; i++)
+            {
+                for(int j = 0; j < cols2; j++)
+                {
+                    float sum = 0;
+                    for(int k = 0; k < cols1; k++)
+                    {
+                        sum += matA[i*cols1+k] * matB[k*rows+j];
+                    }
+                    C[i * cols2 + j] = sum;
+                }
+ 
+            }
+    }
+    public void compareResults()
+    {
+        boolean equal = true;
+        for(int i = 0; i < rows * cols2 ; i++)
+        {
+            if(matC[i] != C[i])
+            {
+                equal = false;
+                break;
+            }
+        }
+        if(!equal)
+            System.out.println("Results are not equal");
+        else
+            System.out.println("Results are equal.. Tested thoroughly!!!");
+    }
+ 
+}

@@ -1,0 +1,27 @@
+import  java.io.B ufferedReader
+import  java.io.FileReader
+import  java.io.PrintWriter
+import  java.io.FileOutputStream
+import  org.biojava.bio.BioException
+import  org.biojava.bio.bio.proteomics.IsoelectricPointCalc
+import  org.biojava.bio.proteomics.MassCalc
+import  org.biojava.bio.seq.ProteinTools
+import  org.biojava.bio.seq.RNATools
+import  org.biojava.bio.seq.Sequence
+import  org.biojava.bio.seq.SequenceIterator
+import  org.biojava.bio.seq.io.SeqIOTools
+import  org.biojava.bio.symbol.Edit
+import  org.biojava.bio.symbol.IllegalAlphabetException
+import  org.biojava.bio.symbol.IllegalSymbolException
+import  org.biojava.bio.symbol.SimpleSymbolList
+import  org.biojava.bio.symbol.SymbolList
+import  org.biojava.bio.symbol.SymbolPropertyTable
+
+
+class CalcMassPI {
+
+	public double mass(SymbolList protein) throws IllegalSymbolException {
+		double mass = 0.0
+		
+	}
+}

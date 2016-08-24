@@ -1,0 +1,13 @@
+
+GroovyLabPr/build
+GroovyLabPr/dist
+glab.props
+glabFavoritePaths.log
+recentsPaneFile.txt
+glabUserPaths.txt
+/GroovyLabGradle/GroovyLab/.nb-gradle/
+/GroovyLabGradle/GroovyLab/build/
+/.nb-gradle/
+/build/
+.gradle 
+/.gradle/
